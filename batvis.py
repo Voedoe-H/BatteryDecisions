@@ -5,22 +5,39 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.feature_selection import SelectKBest, f_regression
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+from typing import List, Tuple
+import functools
 
-df = pd.read_csv("./Battery_RUL.csv")
+def log_function_call(func):
+    @functools.wraps(func)
+    def wrapper(*args,**kwargs):
+        print(f"Calling {func.__name__} with args={args} kwargs={kwargs}")
+        result = func(*args,**kwargs)
+        print(f"{func.__name__} returned {result}")
+        return result
+    return wrapper
 
-startindices = df.index[df["Cycle_Index"] == 1.0].tolist()
+@log_function_call
+def data_set_loading(path: str) -> Tuple[List[pd.DataFrame], List[pd.DataFrame]]:
+    df = pd.read_csv(path)
 
-battery_segments = []
-for i in range(len(startindices)):
-    start = startindices[i]
-    end = startindices[i + 1] if i + 1 < len(startindices) else len(df)
-    battery_segments.append(df.iloc[start:end].reset_index(drop=True))
+    startindices = df.index[df["Cycle_Index"] == 1.0].tolist()
 
-num_batteries = len(battery_segments)
-num_train = int(num_batteries * 0.8)
+    battery_segments = []
+    for i in range(len(startindices)):
+        start = startindices[i]
+        end = startindices[i + 1] if i + 1 < len(startindices) else len(df)
+        battery_segments.append(df.iloc[start:end].reset_index(drop=True))
 
-train_segments = battery_segments[:num_train]
-test_segments = battery_segments[num_train:]
+    num_batteries = len(battery_segments)
+    num_train = int(num_batteries * 0.8)
+
+    train_segments = battery_segments[:num_train]
+    test_segments = battery_segments[num_train:]
+
+    return train_segments, test_segments
+
+train_segments, test_segments = data_set_loading("./Battery_RUL.csv")
 
 train_df = pd.concat(train_segments).reset_index(drop=True)
 test_df = pd.concat(test_segments).reset_index(drop=True)
