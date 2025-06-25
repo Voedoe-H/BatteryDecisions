@@ -92,7 +92,6 @@ def tree_regression_approach():
     plt.tight_layout()
     plt.show()
 
-
 @log_function_call
 def gradient_boosting_approach():
     train_segments, test_segments = data_set_loading("./Battery_RUL.csv")
@@ -139,7 +138,6 @@ def gradient_boosting_approach():
     plt.tight_layout()
     plt.show()
 
-
 @log_function_call
 def gradient_boosting_approach_optimization():
     
@@ -177,7 +175,42 @@ def gradient_boosting_approach_optimization():
 
 @log_function_call
 def random_forest_regression():
-    pass
+    train_segments, test_segments = data_set_loading("./Battery_RUL.csv")
+
+    train_df = pd.concat(train_segments).reset_index(drop=True)
+    test_df = pd.concat(test_segments).reset_index(drop=True)
+
+    X_train = train_df.drop(columns=["RUL","Cycle_Index"])
+    y_train = train_df["RUL"]
+    X_test = test_df.drop(columns=["RUL","Cycle_Index"])
+    y_test = test_df["RUL"]
+
+    reg = ensemble.RandomForestRegressor(n_estimators=200, max_depth=10, min_samples_split=5 ,random_state=69)
+    
+    reg.fit(X_train,y_train)
+    
+    y_pred = reg.predict(X_test)
+
+    r2 = r2_score(y_test, y_pred)
+    mse = mean_squared_error(y_test, y_pred)
+    mae = mean_absolute_error(y_test, y_pred)
+
+    print(f"R2 Score: {r2:.4f}")
+    print(f"Mean Squared Error: {mse:.2f}")
+    print(f"Mean Absolute Error: {mae:.2f}")
+
+    # Plotting
+    plt.figure(figsize=(12, 5))
+    plt.plot(y_test.values, label='True RUL', alpha=0.7)
+    plt.plot(y_pred, label='Predicted RUL', alpha=0.7)
+    plt.title("Random Forest: Predicted vs. True RUL")
+    plt.xlabel("Sample Index")
+    plt.ylabel("RUL")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
 
 #tree_regression_approach()
 gradient_boosting_approach()
+#random_forest_regression()
