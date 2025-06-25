@@ -10,7 +10,9 @@ This repository explores data-driven approaches for predicting **Remaining Usefu
 ## Random Forrest Regression
 
 ### Prediction vs Actual
+![Prediction Results](Figures/RandomForrestRegressionPlot.png)
 
 ## Gradient Boosting Regression
 
 ### Prediction vs Actual
+![Prediction Results](Figures/GradientBoostingPlot.png)
