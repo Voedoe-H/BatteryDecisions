@@ -7,12 +7,24 @@ This repository explores data-driven approaches for predicting **Remaining Usefu
 ### Predictions vs Actual
 ![Prediction Results](Figures/SimpleDecisionTreeRegressionPlot.png)
 
+| Mean Squared Error | Mean Absolute Error | R2        |
+|--------------------|---------------------|-----------|
+| 8360.46            | 62.70               | 0.9195    |
+
 ## Random Forrest Regression
 
 ### Prediction vs Actual
 ![Prediction Results](Figures/RandomForrestRegressionPlot.png)
 
+| Mean Squared Error | Mean Absolute Error | R2        |
+|--------------------|---------------------|-----------|
+| 5121.01            | 49.63               | 0.9507    |
+
 ## Gradient Boosting Regression
 
 ### Prediction vs Actual
 ![Prediction Results](Figures/GradientBoostingPlot.png)
+
+| Mean Squared Error | Mean Absolute Error | R2        |
+|--------------------|---------------------|-----------|
+| 4644.84            | 50.40               | 0.9552    |

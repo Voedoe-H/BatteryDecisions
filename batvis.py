@@ -211,6 +211,6 @@ def random_forest_regression():
     plt.tight_layout()
     plt.show()
 
-#tree_regression_approach()
-gradient_boosting_approach()
+tree_regression_approach()
+#gradient_boosting_approach()
 #random_forest_regression()
