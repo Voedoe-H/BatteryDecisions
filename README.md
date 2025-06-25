@@ -11,7 +11,7 @@ This repository explores data-driven approaches for predicting **Remaining Usefu
 |--------------------|---------------------|-----------|
 | 8360.46            | 62.70               | 0.9195    |
 
-## Random Forrest Regression
+## Random Forest Regression
 
 ### Prediction vs Actual
 ![Prediction Results](Figures/RandomForrestRegressionPlot.png)
@@ -28,3 +28,20 @@ This repository explores data-driven approaches for predicting **Remaining Usefu
 | Mean Squared Error | Mean Absolute Error | R2        |
 |--------------------|---------------------|-----------|
 | 4644.84            | 50.40               | 0.9552    |
+
+
+## Results Overview
+
+| Model             | Mean Squared Error | Mean Absolute Error | R2        |
+|-------------------|--------------------|---------------------|-----------|
+| Decision Tree     | 8360.46            | 62.70               | 0.9195    |
+| Random Forest     | 5121.01            | 49.63               | 0.9507    |
+| Gradient Boosting | 4644.84            | 50.40               | 0.9552    |
+
+In comparison to the baseline Decision Tree model, the Random Forest approach achieved significantly better generalization by leveraging multiple trees in an ensemble. Gradient Boosting, which sequentially refines predictions by fitting new trees to the residuals of previous ones, yielded the best performance overall — though only slightly better than Random Forest.
+
+Overall, Gradient Boosting demonstrated the best performance for RUL estimation in this experiment, making it a strong candidate for further development.
+
+### Repeatability
+
+If you want to run these experiments yourself you can simply clone the main branch. After you have cloned it run in the directory you cloned the branch to "py -m pip install -r requirements.txt" (py command syntax might change depending on how your local system is set up). After that just run in the dir "py batvis.py". You can change the used moel by callign the right function, you have to change this in the source code of the batvis.py
