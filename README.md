@@ -2,6 +2,31 @@
 
 This repository explores data-driven approaches for predicting **Remaining Useful Life (RUL)** of batteries using the [Battery Life Cycle dataset](https://www.kaggle.com/datasets/ignaciovinuales/battery-remaining-useful-life-rul/data) from Kaggle. It focuses on interpretable models such as **Decision Trees** and includes preprocessing, feature selection, training, and evaluation pipelines.
 
+## Feature Selection
+The dataset contains the following features:
+
+- **Cycle_Index**
+- **Discharge Time**
+- **Decrement 3.6–3.4V**
+- **Max. Voltage Discharge**
+- **Min. Voltage Charg.**
+- **Time at 4.15V**
+- **Time Constant Current**
+- **Charging Time**
+- **RUL** (Remaining Useful Life — target)
+
+Since RUL is the target variable, it was naturally excluded from the feature set. Additionally, Cycle_Index was dropped as well, because it correlates almost perfectly (and inversely) with RUL, which could lead to data leakage and overfitting during training.
+
+From the remaining six features, a feature relevance analysis was conducted using SelectKBest with f_regression as the scoring function. With k=5, the following features were selected as most relevant:
+
+- **Decrement 3.6–3.4V**
+- **Max. Voltage Discharge**
+- **Min. Voltage Charg.**
+- **Time at 4.15V**
+- **Time Constant Current**
+
+
+
 ## Decision Tree Regression
 
 ### Predictions vs Actual
