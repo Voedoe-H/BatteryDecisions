@@ -114,7 +114,7 @@ def gradient_boosting_approach():
     }
 
     lower_model = ensemble.GradientBoostingRegressor(loss="quantile", alpha=0.05,**params)
-    median_model = ensemble.GradientBoostingRegressor(loss="quantile",alpha=0.5 **params)
+    median_model = ensemble.GradientBoostingRegressor(loss="quantile",alpha=0.5, **params)
     upper_model = ensemble.GradientBoostingRegressor(loss="quantile", alpha=0.95,**params)
 
     lower_model.fit(X_train,y_train)
@@ -163,6 +163,40 @@ def gradient_boosting_approach():
 
     # Optional: print error metrics
     print("MAE:", mean_absolute_error(y_test, median_pred))
+
+def ci_gradient_optimization():
+    train_segments, test_segments = data_set_loading("./Battery_RUL.csv")
+
+    train_df = pd.concat(train_segments).reset_index(drop=True)
+    test_df = pd.concat(test_segments).reset_index(drop=True)
+
+    X_train = train_df.drop(columns=["RUL", "Cycle_Index"])
+    y_train = train_df["RUL"]
+    X_test = test_df.drop(columns=["RUL", "Cycle_Index"])
+    y_test = test_df["RUL"]
+
+    param_grid = {
+        "n_estimators" : [100,200,300,400,500,600,700,800,900,1000],
+        "max_depth" : [3,4,5],
+        "min_samples_split" : [4,5,6],
+        "learning_rate" : [0.01,0.02,0.03],
+    }
+    
+    reg = ensemble.GradientBoostingRegressor(random_state=69,loss="quantile",alpha=0.5)
+
+    grid_search = GridSearchCV(
+        estimator=reg,
+        param_grid=param_grid,
+        cv= 5,
+        scoring='r2',
+        verbose=2,
+        n_jobs=4    
+        )
+
+    grid_search.fit(X_train,y_train)
+    print(f"Best params: {grid_search.best_params_}")
+    print(f"Best r2: {grid_search.best_score_}")
+
 
 @log_function_call
 def gradient_boosting_approach_optimization():
@@ -237,6 +271,7 @@ def random_forest_regression():
     plt.tight_layout()
     plt.show()
 
-gradient_boosting_approach()
+ci_gradient_optimization()
+#gradient_boosting_approach()
 #gradient_boosting_approach()
 #random_forest_regression()
