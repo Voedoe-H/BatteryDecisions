@@ -79,6 +79,7 @@ To better understand the internal structure of the dataset, a Partial Autocorrel
 | Decision Tree     | 8360.46            | 62.70               | 0.9195    |
 | Random Forest     | 5121.01            | 49.63               | 0.9507    |
 | Gradient Boosting | 4644.84            | 50.40               | 0.9552    |
+| LSTM              | 7193.39            | 63.04               | 0.9267    |
 
 In comparison to the baseline Decision Tree model, the Random Forest approach achieved significantly better generalization by leveraging multiple trees in an ensemble. Gradient Boosting, which sequentially refines predictions by fitting new trees to the residuals of previous ones, yielded the best performance overall — though only slightly better than Random Forest.
 
