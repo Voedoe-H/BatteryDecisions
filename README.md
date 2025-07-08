@@ -1,7 +1,8 @@
 # Battery RUL Prediction with Decision Trees
 
-This repository explores data-driven approaches for predicting **Remaining Useful Life (RUL)** of batteries using the [Battery Life Cycle dataset](https://www.kaggle.com/datasets/ignaciovinuales/battery-remaining-useful-life-rul/data) from Kaggle. It focuses on interpretable models such as **Decision Trees** and includes preprocessing, feature selection, training, and evaluation pipelines.
+This repository explores data-driven approaches for predicting **Remaining Useful Life (RUL)** of batteries using the [Battery Life Cycle dataset](https://www.kaggle.com/datasets/ignaciovinuales/battery-remaining-useful-life-rul/data) from Kaggle. It focuses on interpretable models such as **Decision Trees** and includes preprocessing, feature selection, training, and evaluation pipelines. The models provided in this repository are specifically trained on a data set derived from a particular type of lithium-based battery used in the NASA battery data set. Since the precise battery chemistry (e.g., LiCoO₂, LiFePO₄, etc.) is not specified, these models are unlikely to generalize to batteries with different chemistries, as degradation behavior can vary significantly between types.
 
+If you intend to apply these models in practice, ensure that the underlying battery system closely matches the one represented in the original data. The safest and most reliable approach is to apply the modeling methodology from this repository to your own, system-specific data set to ensure accuracy and validity.
 ## Feature Selection
 The dataset contains the following features:
 
