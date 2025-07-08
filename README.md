@@ -66,6 +66,11 @@ To better understand the internal structure of the dataset, a Partial Autocorrel
 ## LSTM
 
 ### Prediction vs Actual
+![Prediction Results](Figures/LSTMResults.png)
+
+| Mean Squared Error | Mean Absolute Error | R2        |
+|--------------------|---------------------|-----------|
+| 7193.39            | 63.04               | 0.9267    |
 
 ## Results Overview
 
