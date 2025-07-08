@@ -26,7 +26,15 @@ From the remaining six features, a feature relevance analysis was conducted usin
 - **Time at 4.15V**
 - **Time Constant Current**
 
+## Feature Autocorrelation Analysis
+To better understand the internal structure of the dataset, a Partial Autocorrelation Function (PACF) analysis was performed on the mean time-series data across all battery lifetimes. This helps identify the presence of significant lag relationships in the features, which is particularly useful for time-dependent modeling tasks such as RUL estimation.
 
+### PACF Mean Results
+
+![Prediction Results](Figures/SelfCorrelationMeanAllLiftimes.png)
+
+- Features like **Max. Voltage Discharge** and **Min. Voltage Charge** exhibit stronger partial autocorrelations at non-zero lags, suggesting temporal dependencies that could be leaveraged in temporal models such as lstms.
+- Most features show minimal lag correlation beyond the first few steps, indicating that a simple model may suffice for these.
 
 ## Decision Tree Regression
 
