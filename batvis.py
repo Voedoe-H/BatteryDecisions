@@ -110,33 +110,59 @@ def gradient_boosting_approach():
         "max_depth": 3,
         "min_samples_split": 6,
         "learning_rate": 0.03,
-        "loss": "squared_error",
         "random_state": 69
     }
 
-    reg = ensemble.GradientBoostingRegressor(**params)
-    reg.fit(X_train, y_train)
+    lower_model = ensemble.GradientBoostingRegressor(loss="quantile", alpha=0.05,**params)
+    median_model = ensemble.GradientBoostingRegressor(loss="quantile",alpha=0.5 **params)
+    upper_model = ensemble.GradientBoostingRegressor(loss="quantile", alpha=0.95,**params)
 
-    y_pred = reg.predict(X_test)
+    lower_model.fit(X_train,y_train)
+    median_model.fit(X_train,y_train)
+    upper_model.fit(X_train,y_train)
 
-    r2 = r2_score(y_test, y_pred)
-    mse = mean_squared_error(y_test, y_pred)
-    mae = mean_absolute_error(y_test, y_pred)
+    #reg = ensemble.GradientBoostingRegressor(**params)
+    #reg.fit(X_train, y_train)
 
-    print(f"R2 Score: {r2:.4f}")
-    print(f"Mean Squared Error: {mse:.2f}")
-    print(f"Mean Absolute Error: {mae:.2f}")
+    #y_pred = reg.predict(X_test)
 
-    plt.figure(figsize=(12, 5))
-    plt.plot(y_test.values, label='True RUL', alpha=0.7)
-    plt.plot(y_pred, label='Predicted RUL', alpha=0.7)
-    plt.title("Predicted vs. True RUL (Gradient Boosting)")
+    #r2 = r2_score(y_test, y_pred)
+    #mse = mean_squared_error(y_test, y_pred)
+    #mae = mean_absolute_error(y_test, y_pred)
+
+    #print(f"R2 Score: {r2:.4f}")
+    #print(f"Mean Squared Error: {mse:.2f}")
+    #print(f"Mean Absolute Error: {mae:.2f}")
+
+    #plt.figure(figsize=(12, 5))
+    #plt.plot(y_test.values, label='True RUL', alpha=0.7)
+    #plt.plot(y_pred, label='Predicted RUL', alpha=0.7)
+    #plt.title("Predicted vs. True RUL (Gradient Boosting)")
+    #plt.xlabel("Sample Index")
+    #plt.ylabel("RUL")
+    #plt.legend()
+    #plt.grid(True)
+    #plt.tight_layout()
+    #plt.show()
+
+    lower_pred = lower_model.predict(X_test)
+    median_pred = median_model.predict(X_test)
+    upper_pred = upper_model.predict(X_test)
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(y_test.values, label='True RUL', color='black', alpha=0.6)
+    plt.plot(median_pred, label='Predicted RUL (median)', color='blue')
+    plt.fill_between(range(len(median_pred)), lower_pred, upper_pred, color='blue', alpha=0.2, label='90% CI')
+    plt.title("Gradient Boosting: RUL Prediction with Confidence Intervals")
     plt.xlabel("Sample Index")
     plt.ylabel("RUL")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+    # Optional: print error metrics
+    print("MAE:", mean_absolute_error(y_test, median_pred))
 
 @log_function_call
 def gradient_boosting_approach_optimization():
@@ -211,6 +237,6 @@ def random_forest_regression():
     plt.tight_layout()
     plt.show()
 
-tree_regression_approach()
+gradient_boosting_approach()
 #gradient_boosting_approach()
 #random_forest_regression()
