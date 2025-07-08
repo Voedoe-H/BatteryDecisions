@@ -72,6 +72,8 @@ To better understand the internal structure of the dataset, a Partial Autocorrel
 |--------------------|---------------------|-----------|
 | 7193.39            | 63.04               | 0.9267    |
 
+Performance discrapancy will be looked at later
+
 ## Results Overview
 
 | Model             | Mean Squared Error | Mean Absolute Error | R2        |
