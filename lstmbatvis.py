@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from typing import List, Tuple
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf, pacf, ccf
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import matplotlib.pyplot as plt
 
 def data_set_loading(path: str) -> Tuple[List[pd.DataFrame], List[pd.DataFrame]]:
@@ -261,6 +262,14 @@ print(f"Test MSE: {test_loss:.4f}")
 
 actual_rul = np.array(actual_rul)
 predicted_rul = np.array(predicted_rul)
+
+r2 = r2_score(y_true=actual_rul,y_pred=predicted_rul)
+mse = mean_squared_error(actual_rul,predicted_rul)
+mae = mean_absolute_error(actual_rul,predicted_rul)
+
+print(f"r2: {r2:4f}")
+print(f"mse: {mse:4f}")
+print(f"mae: {mae:4f}")
 
 plt.figure(figsize=(12, 6))
 plt.plot(actual_rul, label="True RUL", linewidth=2)
