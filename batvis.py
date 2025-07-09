@@ -105,7 +105,7 @@ def gradient_boosting_approach():
     train_segments, test_segments = data_set_loading("./Battery_RUL.csv")
 
     train_df = pd.concat(train_segments).reset_index(drop=True)
-    test_df = pd.concat(test_segments).reset_index(drop=True)
+    test_df = pd.concat(test_segments[:2]).reset_index(drop=True)
 
     X_train = train_df.drop(columns=["RUL", "Cycle_Index"])
     y_train = train_df["RUL"]
@@ -207,7 +207,7 @@ def ng_boost_test():
     train_segments, test_segments = data_set_loading("./Battery_RUL.csv")
 
     train_df = pd.concat(train_segments).reset_index(drop=True)
-    test_df = pd.concat(test_segments).reset_index(drop=True)
+    test_df = pd.concat(test_segments[:2]).reset_index(drop=True)
 
     X_train = train_df.drop(columns=["RUL", "Cycle_Index"])
     y_train = train_df["RUL"] + EPSILON
@@ -359,6 +359,6 @@ def get_fixed_length_rul_curves(segments, n_points=100):
 
 #ci_gradient_optimization()
 #ng_boost_test()
-quick_data_analysis()
-#gradient_boosting_approach()
+#quick_data_analysis()
+gradient_boosting_approach()
 #random_forest_regression()
