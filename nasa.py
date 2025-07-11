@@ -15,9 +15,10 @@ def parse_start_time(time_str):
 data_dir = "./NASABat/cleaned_dataset/data/"
 
 battery_data = {}
-
 df_meta = pd.read_csv("./NASABat/cleaned_dataset/metadata.csv")
 df_meta["parsed_time"] = df_meta["start_time"].apply(parse_start_time)
+
+print(df_meta["battery_id"].unique())
 
 # Impedance File Structure: Sense_current,Battery_current,Current_ratio,Battery_impedance,Rectified_Impedance
 # Discharge File Structure: Voltage_measured,Current_measured,Temperature_measured,Current_load,Voltage_load,Time
@@ -60,8 +61,10 @@ for battery_id, group in df_meta.groupby("battery_id"):
 cycles_of_battery = {}
 
 for battery_id, cycles in battery_cycles.items():
+
     battery_cycles = []
     num_cycles = len(cycles)
+
     for idx, (discharge_file,charge_file) in enumerate(cycles):
         try:
             discharge_path = os.path.join(data_dir,discharge_file)
@@ -105,3 +108,6 @@ for battery_id, cycles in battery_cycles.items():
         cycles_of_battery[battery_id] = battery_cycles
 
 print(pd.DataFrame(cycles_of_battery["B0045"]).head)
+
+for id,cycles in cycles_of_battery.items():
+    pd.DataFrame(cycles).to_csv(f"./mydat/{id}")
