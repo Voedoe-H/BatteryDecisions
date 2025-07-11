@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import os
 
 
@@ -56,7 +57,11 @@ for battery_id, group in df_meta.groupby("battery_id"):
     battery_cycles[battery_id] = cycles
     #print(f"Battery {battery_id} — Found {len(cycles)} cycles")
 
+cycles_of_battery = {}
+
 for battery_id, cycles in battery_cycles.items():
+    battery_cycles = []
+    num_cycles = len(cycles)
     for idx, (discharge_file,charge_file) in enumerate(cycles):
         try:
             discharge_path = os.path.join(data_dir,discharge_file)
@@ -64,10 +69,39 @@ for battery_id, cycles in battery_cycles.items():
             
             discharge_df = pd.read_csv(discharge_path)
             charge_df = pd.read_csv(charge_path)
-            print(discharge_df.head)
-            print(charge_df.head)
+            
+            discharge_df["Time"] = pd.to_numeric(discharge_df["Time"], errors='coerce')
+            charge_df["Time"] = pd.to_numeric(charge_df["Time"], errors='coerce')
 
+            discharge_df.dropna(subset=["Time"], inplace=True)
+            charge_df.dropna(subset=["Time"], inplace=True)
+
+            discharge_capacity = np.trapezoid(discharge_df["Current_measured"], discharge_df["Time"])
+            charge_capacity = np.trapezoid(charge_df["Current_measured"], charge_df["Time"])
+            
+            discharge_duration = discharge_df["Time"].iloc[-1] - discharge_df["Time"].iloc[0]
+            charge_duration = charge_df["Time"].iloc[-1] - charge_df["Time"].iloc[0]
+            total_duration = discharge_duration + charge_duration
+
+            stats = {
+                "rul": num_cycles - idx - 1,
+                "battery_id": battery_id,
+                "cycle_index": idx,
+                "discharge_capacity": discharge_capacity,
+                "charge_capacity": charge_capacity,
+                "coulombic_efficiency": discharge_capacity / charge_capacity if charge_capacity else np.nan,
+                "total_duration": total_duration,
+                "avg_voltage_discharge": discharge_df["Voltage_measured"].mean(),
+                "avg_voltage_charge": charge_df["Voltage_measured"].mean(),
+                "avg_temp_discharge": discharge_df["Temperature_measured"].mean(),
+                "avg_temp_charge": charge_df["Temperature_measured"].mean(),
+                "max_temp_discharge": discharge_df["Temperature_measured"].max(),
+                "max_temp_charge": charge_df["Temperature_measured"].max(),
+            }
+            battery_cycles.append(stats)
         except Exception as e:
             print(f"Error for {idx} with exception: {e} ")
         
-    break
+        cycles_of_battery[battery_id] = battery_cycles
+
+print(pd.DataFrame(cycles_of_battery["B0045"]).head)
