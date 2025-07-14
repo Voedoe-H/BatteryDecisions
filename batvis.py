@@ -17,6 +17,7 @@ from ngboost.scores import CRPS
 from scipy.interpolate import interp1d
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans, DBSCAN
+from sklearn.manifold import TSNE
 
 def log_function_call(func):
     """
@@ -355,10 +356,59 @@ def get_fixed_length_rul_curves(segments, n_points=100):
         curves.append(y_sampled)
     return np.vstack(curves)
 
+def tsneDataPlot():
+    train_segments, test_segments = data_set_loading("./Battery_RUL.csv")
+    all_segments = train_segments + test_segments
 
+    
+    print(all_segments)
+    segmentLenghts = []
+    merged = []
+    for df in all_segments:
+        segmentLenghts.append(len(df))
+        for vec in df.to_numpy():
+            merged.append(vec)
+    print(segmentLenghts)
+    print(merged[0])
+    X = np.array(merged)
+    X_embedded = TSNE(n_components=2,learning_rate='auto',init='random',perplexity=3).fit_transform(X)
+    x_axis = X_embedded[:, 0]
+    y_axis = X_embedded[:, 1]
+    
+    num_segments = len(all_segments)
+    colors = plt.cm.get_cmap('tab20', num_segments)
+    start_idx = 0
+    for i, length in enumerate(segmentLenghts):
+        end_idx = start_idx + length
+        plt.scatter(
+            x_axis[start_idx:end_idx],
+            y_axis[start_idx:end_idx],
+            c=[colors(i)],
+            label=f'Segment {i+1}',
+            alpha=0.6,
+            s=50
+        )
+        start_idx = end_idx
+
+    # Add labels and legend
+    plt.xlabel('t-SNE Component 1')
+    plt.ylabel('t-SNE Component 2')
+    plt.title('t-SNE Visualization of Battery RUL Segments')
+    plt.legend()
+    plt.show()
+    
+    #nulleingebettet = TSNE(n_components=2, learning_rate='auto', init='random', perplexity=3).fit_transform(all_segments[0].to_numpy())
+    #einseingebettet = TSNE(n_components=2, learning_rate='auto', init='random', perplexity=3).fit_transform(all_segments[1].to_numpy())
+    #xNull = nulleingebettet[:,0]
+    #yNull = nulleingebettet[:,1]
+    #xEins = einseingebettet[:,0]
+    #yEins = einseingebettet[:,1]
+    #print(nulleingebettet.shape)
+    #plt.scatter(xNull,yNull,"r",xEins,yEins,"b")
+    #plt.show()
 
 #ci_gradient_optimization()
 #ng_boost_test()
-#quick_data_analysis()
-gradient_boosting_approach()
+quick_data_analysis()
+#tsneDataPlot()
 #random_forest_regression()
